@@ -1,1 +1,25 @@
+databases:
+  - name: my-database
+    region: frankfurt
+    plan: free
+    databaseName: mydb
+    user: myuser
+    postgresMajorVersion: 15
+
+services:
+  - type: web
+    name: my-web-api
+    runtime: dotnet
+    repo: https://github.com/username/myrepo
+    branch: main
+    region: frankfurt
+    buildCommand: dotnet publish -c Release -o out
+    startCommand: dotnet out/MyWebAPI.dll
+    envVars:
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+      - key: ConnectionStrings__DefaultConnection
+        fromDatabase:
+          name: my-database
+          property: connectionString
 
