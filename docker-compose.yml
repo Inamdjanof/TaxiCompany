@@ -1,0 +1,28 @@
+version: '3.8'
+services:
+  webapp:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+      - "8081:8081"
+    depends_on:
+      - postgres
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=taxi_api_database;Username=postgres;Password=2001
+
+  postgres:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: taxi_api_database   # Ma'lumotlar bazasi nomi
+      POSTGRES_USER: postgres          # Foydalanuvchi nomi
+      POSTGRES_PASSWORD: 2001          # Parol
+    ports:
+      - "5432:5432"                    # PostgreSQL portlari
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:                        # Ma'lumotlarni saqlash hajmi
