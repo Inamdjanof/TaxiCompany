@@ -8,7 +8,7 @@ services:
   - type: web
     name: my-web-api
     runtime: dotnet
-    repo: https://github.com/USERNAME/MY_REPO
+    repo: https://github.com/Inamdjanof/TaxiCompany
     branch: main
     region: frankfurt
     buildCommand: "dotnet publish -c Release -o out"
