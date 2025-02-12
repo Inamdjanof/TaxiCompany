@@ -1,24 +1,23 @@
 databases:
   - name: my-database
-    region: frankfurt
     plan: free
-    databaseName: mydb
+    databaseName: mydatabase
     user: myuser
-    postgresMajorVersion: 15
 
 services:
   - type: web
     name: my-web-api
-    runtime: docker
-    repo: https://github.com/Inamdjanof/TaxiCompany
+    runtime: dotnet
+    repo: https://github.com/USERNAME/MY_REPO
     branch: main
     region: frankfurt
-    dockerfilePath: Dockerfile
+    buildCommand: "dotnet publish -c Release -o out"
+    startCommand: "dotnet out/MyProject.dll"
     envVars:
       - key: ASPNETCORE_ENVIRONMENT
         value: Production
       - key: ConnectionStrings__DefaultConnection
-        fromDatabase:
-          name: my-database
-          property: connectionString
+        value: "Host=my-database.internal;Port=5432;Database=mydatabase;Username=myuser;Password=yourpassword"
+
+
 
