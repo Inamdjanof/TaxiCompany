@@ -8,25 +8,8 @@ services:
       - key: ASPNETCORE_ENVIRONMENT
         value: Production
       - key: ConnectionStrings__DefaultConnection
-        value: "Server=taxicompany-db;Port=5432;Database=taxi_db;User Id=postgres;Password=123456;"
+        sync: false  # Buni Render UI orqali qo'lda kiritish kerak
     dockerfilePath: ./src/TaxiCompany.API/Dockerfile
     autoDeploy: true
     healthCheckPath: "/health"
-
-  - type: pserv
-    name: taxicompany-db
-    runtime: postgres
-    plan: free
-    region: oregon
-    envVars:
-      - key: POSTGRES_DB
-        value: taxi_db
-      - key: POSTGRES_USER
-        value: postgres
-      - key: POSTGRES_PASSWORD
-        value: 123456
-    disk:
-      name: pgdata
-      mountPath: /var/lib/postgresql/data
-      sizeGB: 1
 
