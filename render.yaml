@@ -1,23 +1,32 @@
-databases:
-  - name: my-database
-    plan: free
-    databaseName: mydatabase
-    user: myuser
-
 services:
   - type: web
-    name: my-web-api
-    runtime: dotnet
-    repo: https://github.com/Inamdjanof/TaxiCompany
-    branch: main
-    region: frankfurt
-    buildCommand: "dotnet publish -c Release -o out"
-    startCommand: "dotnet out/MyProject.dll"
+    name: taxicompany-api
+    runtime: docker
+    plan: free
+    region: oregon  # O'zingizga mos regionni tanlang
     envVars:
       - key: ASPNETCORE_ENVIRONMENT
         value: Production
       - key: ConnectionStrings__DefaultConnection
-        value: "Host=my-database.internal;Port=5432;Database=mydatabase;Username=myuser;Password=yourpassword"
+        value: "Server=taxicompany-db;Port=5432;Database=taxi_db;User Id=postgres;Password=123456;"
+    dockerfilePath: ./src/TaxiCompany.API/Dockerfile
+    autoDeploy: true
+    healthCheckPath: "/health"
 
-
+  - type: pserv
+    name: taxicompany-db
+    runtime: postgres
+    plan: free
+    region: oregon
+    envVars:
+      - key: POSTGRES_DB
+        value: taxi_db
+      - key: POSTGRES_USER
+        value: postgres
+      - key: POSTGRES_PASSWORD
+        value: 123456
+    disk:
+      name: pgdata
+      mountPath: /var/lib/postgresql/data
+      sizeGB: 1
 
